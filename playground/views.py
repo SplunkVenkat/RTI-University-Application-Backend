@@ -18,7 +18,7 @@ from rest_framework import generics
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from datetime import datetime, timedelta
 
 
 @api_view(['GET','POST','PATCH'])
@@ -146,6 +146,15 @@ class ApplicationRecordsView(generics.ListAPIView):
     search_fields = ['application_number']
     filter_backends = (DynamicSearchFilter,)
     queryset =  Application.objects.all()
+    serializer_class = ApplicationSerializer
+    pagination_class = StandardResultsSetPagination
+
+# application pagination view
+class ApplicationRecordsRemainingView(generics.ListAPIView):
+    search_fields = ['application_number']
+    filter_backends = (DynamicSearchFilter,)
+    max_dt = datetime.today() - timedelta(days=28)
+    queryset =  Application.objects.filter(date_receive__lte=max_dt,application_status=False)
     serializer_class = ApplicationSerializer
     pagination_class = StandardResultsSetPagination
 

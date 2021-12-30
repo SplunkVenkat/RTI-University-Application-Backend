@@ -32,6 +32,7 @@ class Application(models.Model):
     endorsement = models.CharField(max_length=100, blank=True, default='')
     application_related = models.CharField(max_length=100, blank=True, default='')
     address_transmitted = models.CharField(max_length=100, blank=True, default='')
+    application_status = models.BooleanField(null=True,default=False)
     first_appeal = models.OneToOneField(
         FirstAppeal,
         on_delete=models.SET_NULL,
@@ -45,6 +46,5 @@ class Application(models.Model):
 
 class ApplicationDropDown(models.Model):
     id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=70, blank=False, default='')
     value_data = models.CharField(max_length=100, blank=False, default='')
 

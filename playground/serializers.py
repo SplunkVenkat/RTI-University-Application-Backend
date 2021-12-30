@@ -43,7 +43,8 @@ class ApplicationSerializer(serializers.ModelSerializer):
                   'address_transmitted',
                   'application_number',
                   'first_appeal',
-                  'commission_appeal')
+                  'commission_appeal',
+                  'application_status')
         
     def create(self, validated_data):
          app_id = Application.objects.filter(application_number__startswith=validated_data['application_number']).order_by('-application_number').first()
@@ -63,6 +64,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         instance.date_receive =  validated_data.get('dateReceive', instance.date_receive)
         instance.is_svu =  validated_data.get('is_svu', instance.is_svu)
         instance.last_date =  validated_data.get('last_date', instance.last_date)
+        instance.application_status = validated_data.get('application_status', instance.application_status)
         if instance.is_svu == '1':
             instance.endorsement_date =  validated_data.get('endorsement_date', instance.endorsement_date)
             instance.endorsement =  validated_data.get('endorsement', instance.endorsement)
@@ -114,7 +116,6 @@ class ApplicationDropdownSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationDropDown
         fields = ('id',
-                  'type',
                   'value_data')
 
 
