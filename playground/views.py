@@ -132,7 +132,7 @@ class ApplicationView(APIView):
 
 # pagination config
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
@@ -172,6 +172,21 @@ class ApplicationDropdownView(APIView):
             dropdown_serializer.save()
             return Response(dropdown_serializer.data, status=status.HTTP_201_CREATED)
         return Response(dropdown_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+     def patch(self, request, format=None):
+        appId = request.query_params["id"]
+        applicant = ApplicationDropDown.objects.get(pk=appId)
+        serializer = ApplicationDropdownSerializer(applicant, data=request.data, partial=True)
+        if serializer.is_valid():
+            applicant = serializer.save()
+            return Response(ApplicationDropdownSerializer(applicant).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+     def delete(self, request, format=None ,pk=None):
+         appId = request.query_params["id"]
+         applicant = ApplicationDropDown.objects.get(pk=appId)
+         applicant.delete()
+         return Response(status=status.HTTP_200_OK)
 
 class FirstAppealView(APIView):
     
