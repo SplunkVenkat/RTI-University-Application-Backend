@@ -21,7 +21,7 @@ class Application(models.Model):
     id = models.AutoField(primary_key=True)
     application_number = models.BigIntegerField()
     name = models.CharField(max_length=70, blank=False, default='')
-    of_name = models.CharField(max_length=5, blank=False, default='')
+    of_name = models.CharField(max_length=70, blank=False, default='')
     date_created = models.DateField(null=True, blank=True)
     address =  models.CharField(max_length=100, blank=True, default='')
     mobilenumber = models.CharField(max_length=12, blank=True, default='')
@@ -43,6 +43,7 @@ class Application(models.Model):
         on_delete=models.SET_NULL,
          blank=True, null=True
     )
+    description = models.CharField(max_length=200, blank=True, default='')
 
 class ApplicationDropDown(models.Model):
     id = models.AutoField(primary_key=True)

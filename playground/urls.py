@@ -10,4 +10,5 @@ urlpatterns=[
     path('applicationdropdown/<int:pk>',views.ApplicationDropdownView.as_view()),
     path('firstappeal',views.FirstAppealView.as_view()),
     path('commissionappeal',views.CommissionAppealView.as_view()),
+    path('csvdownload',views.application_csv_download)
 ]

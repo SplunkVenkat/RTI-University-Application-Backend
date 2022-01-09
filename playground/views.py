@@ -6,7 +6,7 @@
 #     return HttpResponse({'status':200})
 from django.shortcuts import render
 
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
  
@@ -19,51 +19,43 @@ from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from datetime import datetime, timedelta
+import csv
+from django.utils.encoding import smart_str
 
 
-@api_view(['GET','POST','PATCH'])
-def applications(request):
-    if request.method == 'GET':
-        applications = Application.objects.all()
-        applications_serializer = ApplicationSerializer(applications, many=True)
-        return Response(applications_serializer.data, safe=False)
-    if request.method == 'POST':
-        application_data = JSONParser().parse(request)
-        app_id = Application.objects.filter(application_number__startswith=application_data['application_number']).order_by('-application_number').first()
-        if app_id:
-            application_data['application_number'] = app_id.application_number + 1
-        else:
-            application_data['application_number'] = application_data['application_number'] * 10000 + 1
-        tutorial_serializer = ApplicationSerializer(data=application_data)
-        if tutorial_serializer.is_valid():
-            tutorial_serializer.save()
-            return Response(tutorial_serializer.data, status=status.HTTP_201_CREATED) 
-        return Response(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == 'PATCH':
-        application_data = JSONParser().parse(request)
-        appId = request.query_params["id"]
-        applicant = Application.objects.get(pk=appId)
-        # first appeal patch
-        if application_data['first_appeal']:
-            FA = FirstAppeal(appeal_reason = application_data['first_appeal']['appeal_reason'],
-                            appeal_endorsement=application_data['first_appeal']['appeal_endorsement'],
-                            appeal_application_number='FA'+application_data['application_number'],
-                            appeal_date = application_data['first_appeal']['appeal_date'],
-                            appeal_date_receive = application_data['first_appeal']['appeal_date_receive'])
-            FA.save()
-            applicant.first_appeal = FA
-        # commission appeal patch
-        if application_data['commission_appeal']:
-            CA = CommissionAppeal(commission_date = application_data['commission_appeal']['commission_date'],
-                            notice_date=application_data['commission_appeal']['notice_date'],
-                            hearing_date=application_data['commission_appeal']['hearing_date'],
-                            commission_application_number = 'CA'+application_data['application_number'],
-                            commission_case_number = application_data['commission_appeal']['commission_case_number'],
-                            commission_file_number = application_data['commission_appeal']['commission_file_number'])
-            CA.save()
-            applicant.commission_appeal = CA
-        applicant.save()
-        return Response({}, status=status.HTTP_201_CREATED) 
+@api_view(['GET'])
+def application_csv_download(request):
+    response = HttpResponse(content_type='text/csv')
+    now = datetime.now()
+    date_time = now.strftime("%m/%d/%y")
+    response['Content-Disposition'] = 'attachment; filename="applicants-as-of-now-{}.csv"'.format(date_time)
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer.writerow([
+		smart_str(u"S.no"),
+		smart_str(u"Application number"),
+		smart_str(u"Name"),
+		smart_str(u"Mobile number"),
+        smart_str(u"Date created"),
+		smart_str(u"First appeal"),
+        smart_str(u"Commision appeal"),
+		smart_str(u"Application status"),
+	])
+    applicants = Application.objects.all()
+    i=1
+    for applicant in applicants:
+        writer.writerow([
+		smart_str(i),
+		smart_str(applicant.application_number),
+		smart_str(applicant.name),
+		smart_str(applicant.mobilenumber),
+        smart_str(applicant.date_created),
+		smart_str('Yes' if applicant.first_appeal else 'No'),
+        smart_str('Yes' if applicant.commission_appeal else 'No'),
+		smart_str('Complete' if applicant.application_status else 'In Progress'),
+	    ])
+        i=i+1
+    return response
 
 
 # Application view dd

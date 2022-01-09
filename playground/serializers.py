@@ -44,7 +44,8 @@ class ApplicationSerializer(serializers.ModelSerializer):
                   'application_number',
                   'first_appeal',
                   'commission_appeal',
-                  'application_status')
+                  'application_status',
+                  'description')
         
     def create(self, validated_data):
          app_id = Application.objects.filter(application_number__startswith=validated_data['application_number']).order_by('-application_number').first()
@@ -65,6 +66,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         instance.is_svu =  validated_data.get('is_svu', instance.is_svu)
         instance.last_date =  validated_data.get('last_date', instance.last_date)
         instance.application_status = validated_data.get('application_status', instance.application_status)
+        instance.description = validated_data.get('description', instance.description)
         if instance.is_svu == '1':
             instance.endorsement_date =  validated_data.get('endorsement_date', instance.endorsement_date)
             instance.endorsement =  validated_data.get('endorsement', instance.endorsement)
