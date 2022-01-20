@@ -21,6 +21,7 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 import csv
 from django.utils.encoding import smart_str
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET'])
@@ -60,6 +61,7 @@ def application_csv_download(request):
 
 # Application view dd
 class ApplicationView(APIView):
+    permission_classes = (IsAuthenticated,) 
 
     def get_object(self, pk=None):
         try:
@@ -130,11 +132,13 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 # filter config
 class DynamicSearchFilter(filters.SearchFilter):
+    permission_classes = (IsAuthenticated,)
     def get_search_fields(self, view, request):
         return request.GET.getlist('search_fields', [])
 
 # application pagination view
 class ApplicationRecordsView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     search_fields = ['application_number']
     filter_backends = (DynamicSearchFilter,)
     queryset =  Application.objects.all()
@@ -143,6 +147,7 @@ class ApplicationRecordsView(generics.ListAPIView):
 
 # application pagination view
 class ApplicationRecordsRemainingView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     search_fields = ['application_number']
     filter_backends = (DynamicSearchFilter,)
     max_dt = datetime.today() - timedelta(days=28)
@@ -152,6 +157,7 @@ class ApplicationRecordsRemainingView(generics.ListAPIView):
 
 # dropdown configuration view
 class ApplicationDropdownView(APIView):
+     permission_classes = (IsAuthenticated,) 
 
      def get(self, request, format=None):
         snippets = ApplicationDropDown.objects.all()
@@ -181,6 +187,7 @@ class ApplicationDropdownView(APIView):
          return Response(status=status.HTTP_200_OK)
 
 class FirstAppealView(APIView):
+    permission_classes = (IsAuthenticated,)
     
     def post(self, request, format=None):
         appId = request.query_params["id"]
@@ -194,6 +201,7 @@ class FirstAppealView(APIView):
         return Response(FA_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class CommissionAppealView(APIView):
+    permission_classes = (IsAuthenticated,)
     
     def post(self, request, format=None):
         appId = request.query_params["id"]
