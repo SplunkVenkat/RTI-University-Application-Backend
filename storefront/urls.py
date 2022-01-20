@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 import debug_toolbar
+from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('playground/',include('playground.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
-    path('api-auth/', include(('playground.urls','playground'), namespace='rest_framework'))
+    path('api-auth/', include(('playground.urls','playground'), namespace='rest_framework')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth')
 ]
