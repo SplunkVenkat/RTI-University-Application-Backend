@@ -93,10 +93,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'svc',
+        'NAME': 'svu',
         'USER': 'pi',
         'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
+        'HOST': 'host.docker.internal',
         'PORT': '5432',
     }
 }
