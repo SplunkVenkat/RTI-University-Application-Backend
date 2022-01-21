@@ -78,7 +78,7 @@ TEMPLATES = [
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     # 'http://localhost:8081',
-    # 'http://localhost:4200',
+     'http://localhost:4200',
 )
 
 WSGI_APPLICATION = 'storefront.wsgi.application'
@@ -94,10 +94,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'svc',
+        'NAME': 'svu',
         'USER': 'pi',
         'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
+        'HOST': 'host.docker.internal',
         'PORT': '5432',
     }
 }
