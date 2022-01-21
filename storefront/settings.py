@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%%_g1&^v6y+i@3_=db013&m1ljva+@5vjk+uxwk73at0wr5bov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["192.168.0.103","127.0.0.1"]
+ALLOWED_HOSTS = ["192.168.0.103","127.0.0.1","localhost"]
 
 
 # Application definition
@@ -77,8 +77,8 @@ TEMPLATES = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
-    'http://localhost:4200',
+    # 'http://localhost:8081',
+    # 'http://localhost:4200',
 )
 
 WSGI_APPLICATION = 'storefront.wsgi.application'
