@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  backend:
+    container_name: univ-backend
+    image: univ-backend
+    ports:
+      - "8000:8000"
+  frontend:
+    container_name: univ-frontend
+    image: univ-frontend
+    ports:
+      - "4200:80"
