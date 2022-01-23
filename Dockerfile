@@ -16,7 +16,6 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip  
 # copy whole project to your docker home directory. 
 COPY . $DockerHOME  
-COPY . docker-entrypoint.sh
 RUN chmod a+x ./docker-entrypoint.sh
 # run this command to install all dependencies  
 RUN pip install -r requirements.txt  
