@@ -11,7 +11,8 @@ class CommissionAppealSerializer(serializers.ModelSerializer):
                   'hearing_date',
                   'commission_application_number',
                   'commission_case_number',
-                  'commission_file_number')
+                  'commission_file_number',
+                  'commission_endorsement')
 
 
 class FirstAppealSerializer(serializers.ModelSerializer):
@@ -104,6 +105,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
                     instance.commission_appeal.commission_application_number = CA_data.get('commission_application_number', instance.commission_appeal.commission_application_number)
                     instance.commission_appeal.commission_case_number = CA_data.get('commission_case_number', instance.commission_appeal.commission_case_number)
                     instance.commission_appeal.commission_file_number = CA_data.get('commission_file_number', instance.commission_appeal.commission_file_number)
+                    instance.commission_appeal.commission_endorsement = CA_data.get('commission_endorsement', instance.commission_appeal.commission_endorsement)
                     instance.commission_appeal.save()
                 else:
                     CA_serializer = CommissionAppealSerializer(data=CA_data)

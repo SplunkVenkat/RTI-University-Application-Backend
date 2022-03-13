@@ -16,6 +16,7 @@ class CommissionAppeal(models.Model):
      commission_application_number = models.CharField(max_length=70, blank=False, default='')
      commission_case_number = models.CharField(max_length=70, blank=False, default='')
      commission_file_number = models.CharField(max_length=70, blank=False, default='')
+     commission_endorsement = models.CharField(max_length=100, blank=False, default='')
 
 class Application(models.Model):
     id = models.AutoField(primary_key=True)
